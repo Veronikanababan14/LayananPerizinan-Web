@@ -12,19 +12,11 @@ class SearchController extends Controller
     {
         $query = $request->input('q');
 
-        // Cari Layanan
-        $layanans = Layanan::where('nama', 'LIKE', "%{$query}%")
-                           ->orWhere('deskripsi', 'LIKE', "%{$query}%")
-                           ->get(['id', 'nama as title', 'deskripsi', \DB::raw("'layanan' as type")]);
+        $layanans = Layanan::where('nama', 'LIKE', "%{$query}%")->get();
+        $perizinans = Perizinan::where('nama', 'LIKE', "%{$query}%")->get();
 
-        // Cari Perizinan
-        $perizinans = Perizinan::where('nama', 'LIKE', "%{$query}%")
-                               ->orWhere('deskripsi', 'LIKE', "%{$query}%")
-                               ->get(['id', 'nama as title', 'deskripsi', \DB::raw("'perizinan' as type")]);
-
-        // Gabungkan hasil
-        $results = $layanans->merge($perizinans);
-
-        return view('search.results', compact('results', 'query'));
+        return view('layanan.search-result', compact('query', 'layanans', 'perizinans'));
     }
 }
+
+

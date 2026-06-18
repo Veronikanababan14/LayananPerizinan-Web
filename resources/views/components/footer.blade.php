@@ -5,7 +5,7 @@
         <div class="block md:hidden">
             <!-- Kolom 1 -->
             <div class="mb-6">
-                <img src="{{ asset('images/logobpbatam.png') }}" alt="Logo BP Batam" class="mb-4 w-32">
+                <img src="{{ asset('images/logoiboss.png') }}" alt="Logo BP Batam" class="mb-4 w-20">
                 <p class="text-sm leading-relaxed">
                     Portal Layanan BP Batam adalah sistem digital yang terintegrasi untuk mempermudah masyarakat dalam mengakses layanan perizinan dan informasi lainnya secara cepat, transparan, dan efisien.
                 </p>
@@ -59,7 +59,7 @@
         <div class="hidden md:grid grid-cols-1 md:grid-cols-4 gap-8">
             <!-- Kolom 1 -->
             <div>
-                <img src="{{ asset('images/logobpbatam.png') }}" alt="Logo BP Batam" class="mb-4 w-32">
+                <img src="{{ asset('images/logoiboss.png') }}" alt="Logo BP Batam" class="mb-4 w-20">
                 <p class="text-sm leading-relaxed">
                     Portal Layanan BP Batam adalah sistem digital yang terintegrasi untuk mempermudah masyarakat dalam mengakses layanan perizinan dan informasi lainnya secara cepat, transparan, dan efisien.
                 </p>

@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Layanan extends Model
 {
-    use HasFactory;
+    
 
     protected $table = 'layanans'; // nama tabel sesuai database
-    protected $fillable = ['nama', 'deskripsi', 'gambar'];
+    protected $fillable = ['nama', 'deskripsi', 'image', 'tanggal'];
 }

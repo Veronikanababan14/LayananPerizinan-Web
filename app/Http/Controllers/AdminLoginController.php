@@ -2,36 +2,98 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Password; // untuk password broker
+use App\Models\User;
 
 class AdminLoginController extends Controller
 {
     public function showLogin()
     {
-        return view('admin.admin-login'); // bikin view khusus admin
+        return view('admin.admin-login');
     }
 
     public function login(Request $request)
     {
+        // Validasi input
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
         $credentials = $request->only('email', 'password');
 
-       if (Auth::attempt($credentials)) {
-    if (Auth::user()->is_admin) {
-        return redirect()->route('admin.dashboard');
-    } else {
-        Auth::logout();
-        return redirect('/login')->withErrors(['email' => 'Akses ditolak, bukan admin']);
-    }
-}
+        // Coba login
+        if (Auth::attempt($credentials)) {
+            // Cek role admin
+            if (Auth::user()->role === 'admin') {
+                $request->session()->regenerate();
+                return redirect()->route('admin.dashboard');
+            }
 
-        return back()->withErrors(['email' => 'Email atau password salah']);
+            Auth::logout();
+            return redirect()->back()->with('error', 'Akses ditolak, Anda bukan admin')->withInput();
+        }
+
+        // Jika login gagal
+        return redirect()->back()
+                         ->with('error', 'Email atau password salah')
+                         ->withInput(); // supaya input email tetap ada
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
         Auth::logout();
-        return redirect('/admin/login');
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('admin.login'); // redirect ke halaman login admin
     }
+
+    // =========================
+    // Forgot Password Admin
+    // =========================
+
+    // Tampilkan form forgot password
+    public function showForgotForm()
+    {
+        // Mengacu pada view resources/views/admin/passwords/email.blade.php
+        return view('admin.password.email');
+    }
+
+    // Kirim link reset password via email
+    public function sendResetLink(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+        ]);
+
+        // Pastikan admin ada
+        $admin = User::where('email', $request->email)
+                     ->where('role', 'admin')
+                     ->first();
+
+        if (!$admin) {
+            return back()->with('error', 'Email admin tidak ditemukan');
+        }
+
+        // Kirim link reset password menggunakan Laravel Password Broker
+        $status = Password::sendResetLink(['email' => $admin->email]);
+
+        return $status === Password::RESET_LINK_SENT
+            ? back()->with('success', 'Link reset password telah dikirim ke email Anda')
+            : back()->with('error', 'Gagal mengirim link reset password');
+    }
+
+    // **Logout admin**
+    public function destroy(Request $request)
+    {
+        Auth::logout();
+
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+
+    return redirect()->route('landing');
+}
 }

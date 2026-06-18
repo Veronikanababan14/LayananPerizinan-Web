@@ -3,56 +3,58 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
-    /**
-     * Tampilkan form login.
-     */
-    public function showLogin()
+    use AuthenticatesUsers;
+
+    protected $redirectTo = '/dashboard-user';
+
+    public function __construct()
     {
-        return view('auth.login');
+        $this->middleware('guest')->except('logout');
+        $this->middleware('auth')->only('logout');
     }
 
     /**
-     * Proses login user.
+     * Override method login untuk menambahkan flash notifikasi
      */
     public function login(Request $request)
-    {
-        // Validasi input
-        $credentials = $request->validate([
-            'email'    => ['required', 'email'],
-            'password' => ['required'],
-        ]);
+{
+    $credentials = $request->only('email', 'password');
 
-        // Coba login
-        if (Auth::attempt($credentials, $request->filled('remember'))) {
-            // regenerate session agar lebih aman
-            $request->session()->regenerate();
+    $request->validate([
+        'email' => 'required|email',
+        'password' => 'required|string',
+    ]);
 
-            return redirect()->intended('/dashboard')
-                             ->with('success', 'Berhasil login!');
+    if (Auth::attempt($credentials, $request->filled('remember'))) {
+        $request->session()->regenerate();
+
+        if (Auth::user()->role === 'admin') {
+            return redirect()->route('admin.dashboard');
         }
 
-        // Jika gagal login
-        return back()->withErrors([
-            'email' => 'Email atau password salah.',
-        ])->onlyInput('email');
+        return redirect()->route('dashboard.user');
     }
 
+    return back()->withInput($request->only('email'))
+                 ->with('error', 'Email atau password yang Anda masukkan salah!');
+}
+
     /**
-     * Logout user.
+     * Logout user
      */
     public function logout(Request $request)
     {
         Auth::logout();
 
-        // invalidate session
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/login')->with('success', 'Anda sudah logout.');
+        return redirect()->route('landing'); // arahkan ke halaman beranda
     }
 }

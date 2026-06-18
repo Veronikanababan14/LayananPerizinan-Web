@@ -13,7 +13,7 @@ class AdminUserSeeder extends Seeder
      */
     public function run(): void
     {
-        User::updateOrCreate(
+        User::create(
             ['email' => 'admin@bpbatam.go.id'], // email unik
             [
                 'name' => 'Administrator',

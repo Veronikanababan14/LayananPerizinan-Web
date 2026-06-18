@@ -18,18 +18,6 @@ class PageController extends Controller
         return view('pages.profil');
     }
 
-    public function sejarah() {
-        return view('pages.sejarah');
-    }
-
-    public function visiMisi() {
-        return view('pages.visi-misi');
-    }
-
-    public function struktur() {
-        return view('pages.struktur');
-    }
-
     public function kontak() {
         return view('pages.kontak');
     }
