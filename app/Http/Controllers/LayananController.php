@@ -37,36 +37,40 @@ class LayananController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $request->validate([
-            'nama' => 'required',
-            'deskripsi' => 'required',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
-        ]);
+{
+    $validated = $request->validate([
+        'nama' => 'required|string|max:255',
+        'deskripsi' => 'required|string',
+        'persyaratan' => 'required|string',
+        'alur_layanan' => 'required|string',
+        'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+    ]);
 
-        $namaFile = null;
+    $data = [
+        'nama' => $validated['nama'],
+        'deskripsi' => $validated['deskripsi'],
+        'persyaratan' => $validated['persyaratan'],
+        'alur_layanan' => $validated['alur_layanan'],
+    ];
 
-        if ($request->hasFile('image')) {
+    if ($request->hasFile('image')) {
+        $namaFile = time() . '_' .
+            $request->file('image')->getClientOriginalName();
 
-            $namaFile = time() . '_' .
-                $request->file('image')->getClientOriginalName();
+        $request->file('image')->move(
+            public_path('images'),
+            $namaFile
+        );
 
-            $request->file('image')->move(
-                public_path('images'),
-                $namaFile
-            );
-        }
-
-        Layanan::create([
-            'nama' => $request->nama,
-            'deskripsi' => $request->deskripsi,
-            'image' => $namaFile
-        ]);
-
-        return redirect()
-            ->route('admin.iuk.index')
-            ->with('success', 'Data berhasil ditambahkan');
+        $data['image'] = $namaFile;
     }
+
+    Layanan::create($data);
+
+    return redirect()
+        ->route('admin.iuk.index')
+        ->with('success', 'Data berhasil ditambahkan');
+}
 
     public function edit($id)
     {
@@ -76,38 +80,42 @@ class LayananController extends Controller
     }
 
     public function update(Request $request, $id)
-    {
-        $request->validate([
-            'nama' => 'required',
-            'deskripsi' => 'required',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
-        ]);
+{
+    $validated = $request->validate([
+        'nama' => 'required|string|max:255',
+        'deskripsi' => 'required|string',
+        'persyaratan' => 'required|string',
+        'alur_layanan' => 'required|string',
+        'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+    ]);
 
-        $layanan = Layanan::findOrFail($id);
+    $layanan = Layanan::findOrFail($id);
 
-        $data = [
-            'nama' => $request->nama,
-            'deskripsi' => $request->deskripsi
-        ];
+    $data = [
+        'nama' => $validated['nama'],
+        'deskripsi' => $validated['deskripsi'],
+        'persyaratan' => $validated['persyaratan'],
+        'alur_layanan' => $validated['alur_layanan'],
+    ];
 
-        if ($request->hasFile('image')) {
+    if ($request->hasFile('image')) {
+        $namaFile = time() . '_' .
+            $request->file('image')->getClientOriginalName();
 
-            $namaFile = time() . '_' .
-                $request->file('image')->getClientOriginalName();
+        $request->file('image')->move(
+            public_path('images'),
+            $namaFile
+        );
 
-            $request->file('image')->move(
-                public_path('images'),
-                $namaFile
-            );
-
-            $data['image'] = $namaFile;
-        }
-
-        $layanan->update($data);
-
-        return redirect()->back()
-    ->with('success', 'Data berhasil diupdate');
+        $data['image'] = $namaFile;
     }
+
+    $layanan->update($data);
+
+    return redirect()
+        ->route('admin.iuk.index')
+        ->with('success', 'Data berhasil diupdate');
+}
 
     public function destroy($id)
     {

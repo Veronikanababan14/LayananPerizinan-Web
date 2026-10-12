@@ -10,5 +10,5 @@ class Layanan extends Model
     
 
     protected $table = 'layanans'; // nama tabel sesuai database
-    protected $fillable = ['nama', 'deskripsi', 'image', 'tanggal'];
+    protected $fillable = ['nama', 'deskripsi', 'persyaratan', 'alur_layanan', 'image', 'tanggal'];
 }

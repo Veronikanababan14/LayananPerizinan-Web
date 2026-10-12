@@ -15,9 +15,10 @@ class DashboardController extends Controller
     public function index()
     {
         $layanan = Layanan::all();
+        $perizinan = Perizinan::all();
 
         $pengajuan = Pengajuan::where('user_id', Auth::id())
-            ->with('layanan')
+            ->with(['layanan', 'perizinan'])
             ->latest()
             ->get();
 
@@ -55,6 +56,7 @@ class DashboardController extends Controller
 
         return view('users.dashboard', compact(
             'layanan',
+            'perizinan',
             'pengajuan',
             'notifikasi_count',
             'total_pengajuan',

@@ -10,9 +10,10 @@
         <!-- Item FAQ -->
         @foreach ([
             1 => 'Apa itu layanan perizinan BP Batam?',
-            2 => 'Bagaimana cara mengajukan izin di BP Batam?',
-            3 => 'Berapa lama proses penerbitan izin?',
-            4 => 'Siapa yang bisa saya hubungi jika mengalami kesulitan?'
+            2 => 'Bagaimana cara mengajukan permohonan perizinan?',
+            3 => 'Bagaimana cara mengetahui status permohonan?',
+            4 => 'Siapa yang bisa saya hubungi jika mengalami kesulitan?',
+            5 => 'Apa yang harus dilakukan jika permohonan ditolak?'
         ] as $id => $question)
         
         <div class="border rounded-xl shadow-sm p-5 text-left transition hover:bg-gray-300">
@@ -37,10 +38,17 @@
                 @elseif ($id == 2)
                     Permohonan izin dapat dilakukan secara online melalui portal layanan BP Batam atau datang langsung ke kantor PTSP.
                 @elseif ($id == 3)
-                    Waktu penerbitan izin bervariasi, mulai dari 1–14 hari kerja tergantung jenis izin dan kelengkapan dokumen.
-                @else
-                    Anda dapat menghubungi Call Center BP Batam di <b>1500671</b> atau melalui email resmi <b>ptsp@bpbatam.go.id</b>.
-                @endif
+                    Status permohonan dapat dilihat melalui menu Permohonan Saya setelah pengguna masuk ke dalam sistem.
+                @elseif ($id == 4)
+
+                        Anda dapat menghubungi layanan BP Batam melalui informasi kontak yang tersedia pada halaman Kontak.
+
+                    @elseif ($id == 5)
+
+                        Pengguna dapat melihat catatan dari Admin pada detail permohonan, kemudian memperbaiki dan mengirim ulang dokumen sesuai dengan catatan yang diberikan.
+
+                    @endif
+
             </p>
         </div>
 

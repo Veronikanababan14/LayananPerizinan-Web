@@ -34,21 +34,18 @@ class AdminPengajuanController extends Controller
         $pengajuan->save();
 
         $pesanMap = [
-            'menunggu'  => 'Pengajuan anda sedang menunggu diproses oleh admin.',
-            'diproses'  => 'Pengajuan anda sedang diproses oleh admin.',
-            'disetujui' => 'Selamat! Pengajuan anda telah disetujui.',
-            'ditolak'   => 'Pengajuan anda ditolak. Silakan cek kembali persyaratan.',
+            'diproses'  => 'Permohonan anda sedang diproses oleh admin.',
+            'disetujui' => 'Selamat! Permohonan anda telah disetujui.',
+            'ditolak'   => 'Permohonan anda ditolak. Silakan cek kembali persyaratan.',
         ];
 
         $judulMap = [
-            'menunggu'  => 'Pengajuan Menunggu Diproses',
-            'diproses'  => 'Pengajuan Sedang Diproses',
-            'disetujui' => 'Pengajuan Disetujui ✅',
-            'ditolak'   => 'Pengajuan Ditolak ❌',
+            'diproses'  => 'Permohonan Sedang Diproses',
+            'disetujui' => 'Permohonan Disetujui ✅',
+            'ditolak'   => 'Permohonan Ditolak ❌',
         ];
 
         $tipeMap = [
-            'menunggu'  => 'info',
             'diproses'  => 'info',
             'disetujui' => 'success',
             'ditolak'   => 'warning',
@@ -73,10 +70,14 @@ class AdminPengajuanController extends Controller
 
             'status' => $request->status,
         ]);
-
+$pesanAdmin = [
+    'diproses'  => 'Status permohonan berhasil diperbarui.',
+    'disetujui' => 'Permohonan berhasil disetujui.',
+    'ditolak'   => 'Permohonan berhasil ditolak.',
+];
         return redirect()
-            ->route('admin.pengajuan.index')
-            ->with('success', 'Status pengajuan berhasil diperbarui!');
+    ->route('admin.pengajuan.index')
+    ->with('success', $pesanAdmin[$request->status]);
     }
 
     // BACA NOTIFIKASI ADMIN

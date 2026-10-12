@@ -13,7 +13,9 @@
 
       {{-- Kolom kanan: FORM --}}
       <div class="bg-[#0b1d63] p-8 md:p-10 flex flex-col justify-center">
-        <h2 class="text-3xl font-bold text-white mb-8">Login</h2>
+        <h2 class="text-3xl font-bold text-white mb-8">
+    {{ request()->routeIs('admin.login') ? 'Login Admin' : 'Login' }}
+</h2>
 
         {{-- Flash Notifikasi --}}
 @if (session('error'))
@@ -22,7 +24,8 @@
   </div>
 @endif
 
-        <form method="POST" action="{{ route('login') }}">
+        <form method="POST"
+      action="{{ request()->routeIs('admin.login') ? route('admin.login.submit') : route('login') }}">
           @csrf
 
           {{-- Email --}}
@@ -80,9 +83,9 @@
               <input type="checkbox" name="remember" class="rounded">
               <span>Ingat saya</span>
             </label>
-            <a href="{{ route('password.request') }}" >
-              Lupa password?
-            </a>
+            <a href="{{ request()->routeIs('admin.login') ? route('admin.password.request') : route('password.request') }}">
+    Lupa password?
+</a>
           </div>
 
           {{-- Tombol Masuk --}}
@@ -92,11 +95,12 @@
             Masuk
           </button>
 
-          {{-- Link Sign Up --}}
-          <p class="mt-4 text-sm text-white/80 text-center">
-            Belum punya akun?
-            <a href="{{ route('register') }}" >Register</a>
-          </p>
+         @if (!request()->routeIs('admin.login'))
+    <p class="mt-4 text-sm text-white/80 text-center">
+        Belum punya akun?
+        <a href="{{ route('register') }}">Register</a>
+    </p>
+@endif
 
         </form>
       </div>

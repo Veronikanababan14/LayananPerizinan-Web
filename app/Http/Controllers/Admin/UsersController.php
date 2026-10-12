@@ -8,12 +8,20 @@ use Illuminate\Http\Request;
 
 class UsersController extends Controller
 {
-    public function index()
-    {
-        // Ambil semua data user dari database
-        $users = User::all();
+    public function index(Request $request)
+{
+    $search = $request->search;
 
-         // Kirim data ke view
-        return view('admin.users.index', compact('users'));
-    }
+    $users = User::where('role', '!=', 'admin')
+    ->when($search, function ($query, $search) {
+        $query->where(function ($q) use ($search) {
+            $q->where('name', 'like', '%' . $search . '%')
+              ->orWhere('email', 'like', '%' . $search . '%');
+        });
+    })
+    ->orderBy('created_at', 'desc')
+    ->get();
+
+    return view('admin.users.index', compact('users'));
+}
 }

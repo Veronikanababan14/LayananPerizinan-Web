@@ -144,35 +144,12 @@
 <section class="hero-section">
     <div class="hero-container">
         <div class="hero-text">
-            <h1>PERIZINAN Batam</h1>
+            <h1>IBOSS Batam</h1>
             <p class="sub-title">Indonesia Batam Online Single Submission</p>
             <p class="description">
-                Sistem aplikasi perizinan secara elektronik yang terintegrasi dengan sistem Online Single Submission Nasional di wilayah Kawasan Perdagangan Bebas dan Pelabuhan Bebas (KPBPB) Batam.
+                Sistem layanan informasi dan permohonan perizinan yang digunakan untuk membantu pengguna memperoleh informasi layanan serta mengajukan permohonan perizinan secara elektronik.
             </p>
 
-            @auth
-            <div class="hero-buttons mt-8">
-                <a href="#" class="btn btn-primary pointer-events-none cursor-default">
-                    Jelajahi Layanan/Perizinan
-                </a>
-            </div>
-
-            <form action="{{ route('layanan.search') }}" method="GET" class="relative max-w-sm mt-6 hero-search">
-                <input type="text" name="q"
-                    value="{{ request('q') }}"
-                    class="w-full p-3 pr-12 bg-white text-gray-600 placeholder-gray-400 rounded shadow-md focus:outline-none"
-                    placeholder="Cari di sini...">
-                <button type="submit" 
-                    class="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center text-blue-500 cursor-pointer hover:text-blue-700 transition leading-none">
-                    <svg xmlns="http://www.w3.org/2000/svg"
-                        class="h-5 w-5"
-                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1110.5 3a7.5 7.5 0 016.15 13.65z" />
-                    </svg>
-                </button>
-            </form>
-            @endauth
         </div>
 
         <div class="hero-image">

@@ -49,13 +49,7 @@
             </div>
         @endif
 
-        {{-- Back --}}
-        <div class="mt-8">
-            <a href="{{ route('home') }}" 
-               class="inline-block px-4 py-2 border border-gray-400 rounded-lg text-gray-700 hover:bg-gray-100 transition">
-               ← Kembali ke Beranda
-            </a>
-        </div>
+        
     </div>
 </div>
 @endsection

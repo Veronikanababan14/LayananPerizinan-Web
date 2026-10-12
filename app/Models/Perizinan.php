@@ -16,6 +16,8 @@ class Perizinan extends Model
     protected $fillable = [
         'nama',
         'deskripsi',
+        'persyaratan',
+        'alur_layanan',
         'image',
         'tanggal',
     ];

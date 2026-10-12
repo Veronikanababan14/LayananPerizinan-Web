@@ -13,6 +13,22 @@
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
           <style>
+            html,
+body{
+    overflow-x:hidden;
+}
+
+#sidebar{
+    will-change:transform;
+}
+
+main{
+
+    width:100%;
+
+    overflow-x:hidden;
+
+}
         [x-cloak] {
             display: none !important;
         }
@@ -22,14 +38,33 @@
     <script src="//unpkg.com/alpinejs" defer></script>
 </head>
 
-<body class="bg-gray-100 text-gray-900">
+<body class="bg-gray-100 text-gray-900 overflow-x-hidden">
 
-<div class="flex min-h-screen">
+<div class="flex min-h-screen w-full overflow-x-hidden">
 
     <!-- 🔵 SIDEBAR -->
     <aside id="sidebar"
-           class="fixed top-0 left-0 w-56 h-full max-h-screen overflow-y-auto bg-blue-800 text-white shadow-md p-6 z-[9999]
-              transform -translate-x-full md:translate-x-0 transition-all duration-300">
+class="
+fixed
+top-0
+left-0
+bottom-0
+w-56
+bg-blue-800
+text-white
+overflow-y-auto
+shadow-xl
+p-6
+z-50
+
+transform
+-translate-x-full
+md:translate-x-0
+
+transition-transform
+duration-300
+ease-in-out
+">
                   
 
         <!-- 📌 Header Mobile (Logo kiri + X kanan) -->
@@ -53,13 +88,21 @@
         <ul class="space-y-2 list-none">
 
     <!-- Dashboard -->
-    <li>
-        <a href="{{ route('admin.dashboard') }}"
-           class="flex items-center gap-3 py-2 px-3 hover:bg-blue-900 rounded text-sm">
-            <img src="{{ asset('images/dashboard-icon.png') }}" class="w-6 h-6 object-contain" alt="">
-            <span>Dashboard</span>
-        </a>
-    </li>
+<li>
+    <a href="{{ route('admin.dashboard') }}"
+       class="flex items-center gap-3 py-2 px-3 rounded-lg text-sm transition-all duration-300
+       {{ request()->routeIs('admin.dashboard') 
+            ? 'bg-blue-500/90
+font-medium
+text-white' 
+            : 'hover:bg-blue-900 text-white' }}">
+
+        <img src="{{ asset('images/dashboard-icon.png') }}"
+             class="w-6 h-6 object-contain" alt="">
+
+        <span>Dashboard</span>
+    </a>
+</li>
 <!-- IUK (SINGLE MENU) -->
 <li>
     <a href="{{ route('admin.iuk.index') }}"
@@ -92,7 +135,7 @@
     <a href="{{ route('admin.pengajuan.index') }}"
    class="flex items-center gap-3 px-3 py-2 hover:bg-blue-900 rounded text-sm">
     <i class="fa-solid fa-inbox text-lg"></i>
-    Pengajuan Masuk
+    Permohonan Masuk
 </a>
 
     <!-- Users -->
@@ -115,12 +158,43 @@
     </div>
 
     <!-- 🔵 MAIN CONTENT AREA -->
-    <div class="flex-1 flex flex-col min-h-screen bg-gray-100
-                ml-0 md:ml-56 transition-all duration-300">
+    <div
+class="
+flex-1
+flex
+flex-col
+min-h-screen
+bg-gray-100
+
+w-full
+overflow-x-hidden
+
+ml-0
+md:ml-56
+">
 
         <!-- NAVBAR -->
-<nav class="fixed top-0 left-0 md:left-56 right-0 h-16 
-     bg-white shadow flex items-center justify-between px-4 z-40">
+<nav
+class="
+fixed
+top-0
+left-0
+right-0
+md:left-56
+
+h-16
+
+bg-white
+shadow
+
+flex
+items-center
+justify-between
+
+px-4
+
+z-40
+">
 
     <!-- BAGIAN KIRI (Hamburger + Title + Tanggal) -->
     <div class="flex items-center gap-4">
@@ -185,9 +259,11 @@
                         </div>
 
                         <div class="flex-1 min-w-0">
-                            <p class="text-sm font-semibold text-gray-800">Pengajuan Baru Masuk</p>
+                            <p class="text-sm font-semibold text-gray-800">
+    {{ $item->is_perbaikan ? 'Perbaikan Permohonan Masuk' : 'Permohonan Baru Masuk' }}
+</p>
                             <p class="text-xs text-gray-500 mt-0.5 truncate">
-                                {{ $item->layanan->nama ?? '-' }} — {{ $item->user->name ?? '-' }}
+                                {{ $item->layanan?->nama ?? $item->perizinan?->nama ?? '-' }} — {{ $item->user?->name ?? '-' }}
                             </p>
                             <p class="text-xs text-gray-400 mt-1">
                                 {{ $item->created_at->diffForHumans() }}
@@ -199,9 +275,18 @@
                         @endif
                     </a>
                 @empty
-                    <div class="px-4 py-8 text-center">
+                    <div class="
+px-3 md:px-6
+py-2 md:py-3
+
+text-sm md:text-base
+
+rounded-xl
+
+shadow-lg
+">
                         <i class="fa-regular fa-bell-slash text-gray-300 text-3xl mb-2 block"></i>
-                        <p class="text-sm text-gray-400">Belum ada pengajuan</p>
+                        <p class="text-sm text-gray-400">Belum ada permohonan</p>
                     </div>
                 @endforelse
             </div>
@@ -209,7 +294,7 @@
             <div class="px-4 py-3 border-t border-gray-100 text-center">
                 <a href="{{ route('admin.pengajuan.index') }}"
                     class="text-xs text-blue-600 hover:underline font-medium">
-                    Lihat semua pengajuan
+                    Lihat semua permohonan
                 </a>
             </div>
         </div>
@@ -220,9 +305,9 @@
         <button @click="open = !open"
             class="flex items-center gap-2 px-3 py-1.5 border border-gray-300 rounded-full text-sm whitespace-nowrap hover:bg-gray-100 transition">
 
-            <div class="w-8 h-8 rounded-full bg-purple-500 text-white flex items-center justify-center text-sm font-bold">
-                {{ $initial }}
-            </div>
+    <div class="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center text-sm font-bold">
+    {{ $initial }}
+    </div>
 
             <span class="text-gray-700 hidden sm:inline">
                 {{ auth()->user()->name }}
@@ -271,37 +356,57 @@
 
 <!-- Script Sidebar -->
 <script>
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+
     function showSidebar() {
-        document.getElementById('sidebar').classList.remove('-translate-x-full');
-        document.getElementById('sidebarOverlay').classList.remove('hidden');
+        sidebar.classList.remove('-translate-x-full');
+        overlay.classList.remove('hidden');
+        document.body.classList.add('overflow-hidden');
     }
 
     function hideSidebar() {
-        document.getElementById('sidebar').classList.add('-translate-x-full');
-        document.getElementById('sidebarOverlay').classList.add('hidden');
+        sidebar.classList.add('-translate-x-full');
+        overlay.classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
     }
+
+    window.addEventListener('resize', function () {
+        if (window.innerWidth >= 768) {
+            sidebar.classList.remove('-translate-x-full');
+            overlay.classList.add('hidden');
+            document.body.classList.remove('overflow-hidden');
+        } else {
+            sidebar.classList.add('-translate-x-full');
+        }
+    });
 
     // Menampilkan hari dan tanggal Indonesia
     const today = new Date();
-    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    document.getElementById('todayDate').textContent = today.toLocaleDateString('id-ID', options);
+    const options = {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    };
+    document.getElementById('todayDate').textContent =
+        today.toLocaleDateString('id-ID', options);
 
     function markAllRead() {
-    fetch('{{ route("admin.notifikasi.readAll") }}', {
-        method: 'POST',
-        headers: {
-            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-            'Content-Type': 'application/json'
-        }
-    }).then(() => {
-        // Hilangkan badge
-        const badge = document.querySelector('.bg-red-500.rounded-full');
-        if (badge) badge.remove();
+        fetch('{{ route("admin.notifikasi.readAll") }}', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Content-Type': 'application/json'
+            }
+        }).then(() => {
+            const badge = document.querySelector('.bg-red-500.rounded-full');
+            if (badge) badge.remove();
 
-        // Hilangkan titik biru semua item
-        document.querySelectorAll('.bg-blue-500.rounded-full').forEach(el => el.remove());
-    });
-}
+            document.querySelectorAll('.bg-blue-500.rounded-full')
+                .forEach(el => el.remove());
+        });
+    }
 </script>
 
 </body>

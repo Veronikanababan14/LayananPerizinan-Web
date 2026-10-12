@@ -91,36 +91,43 @@ public function createAdmin()
     return view('admin.perizinan.create');
 }
 
+
 public function storeAdmin(Request $request)
 {
-    $request->validate([
-        'nama' => 'required',
-        'deskripsi' => 'required',
-        'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
+    $validated = $request->validate([
+        'nama' => 'required|string|max:255',
+        'deskripsi' => 'required|string',
+        'persyaratan' => 'required|string',
+        'alur_layanan' => 'required|string',
+        'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
     ]);
 
-    $imageName = null;
+    $data = [
+        'nama' => $validated['nama'],
+        'deskripsi' => $validated['deskripsi'],
+        'persyaratan' => $validated['persyaratan'],
+        'alur_layanan' => $validated['alur_layanan'],
+    ];
 
     if ($request->hasFile('image')) {
-
-        $imageName = time().'_'.$request->file('image')->getClientOriginalName();
+        $imageName = time() . '_' .
+            $request->file('image')->getClientOriginalName();
 
         $request->file('image')->move(
             public_path('images'),
             $imageName
         );
+
+        $data['image'] = $imageName;
     }
 
-    Perizinan::create([
-        'nama' => $request->nama,
-        'deskripsi' => $request->deskripsi,
-        'image' => $imageName
-    ]);
+    Perizinan::create($data);
 
     return redirect()
         ->route('admin.perizinan.index')
         ->with('success', 'Data berhasil ditambahkan');
 }
+
 
 public function editAdmin($id)
 {
@@ -132,24 +139,29 @@ public function editAdmin($id)
     );
 }
 
+
 public function updateAdmin(Request $request, $id)
 {
-    $request->validate([
-        'nama' => 'required',
-        'deskripsi' => 'required',
-        'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
+    $validated = $request->validate([
+        'nama' => 'required|string|max:255',
+        'deskripsi' => 'required|string',
+        'persyaratan' => 'required|string',
+        'alur_layanan' => 'required|string',
+        'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
     ]);
 
     $perizinan = Perizinan::findOrFail($id);
 
     $data = [
-        'nama' => $request->nama,
-        'deskripsi' => $request->deskripsi
+        'nama' => $validated['nama'],
+        'deskripsi' => $validated['deskripsi'],
+        'persyaratan' => $validated['persyaratan'],
+        'alur_layanan' => $validated['alur_layanan'],
     ];
 
     if ($request->hasFile('image')) {
-
-        $imageName = time().'_'.$request->file('image')->getClientOriginalName();
+        $imageName = time() . '_' .
+            $request->file('image')->getClientOriginalName();
 
         $request->file('image')->move(
             public_path('images'),

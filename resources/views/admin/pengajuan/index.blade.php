@@ -3,40 +3,70 @@
 @section('content')
 
 <div class="mt-4 mb-6">
-    <h2 class="text-2xl font-bold text-gray-800">Pengajuan Masuk</h2>
-    <p class="text-gray-500 text-sm mt-1">Daftar semua pengajuan perizinan dari user.</p>
+    <h2 class="text-2xl font-bold text-gray-800">Permohonan Masuk</h2>
+    <p class="text-gray-500 text-sm mt-1">Daftar semua permohonan perizinan dari user</p>
 </div>
 
 <!-- STATISTIK -->
 <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
 
-    <div class="bg-gradient-to-r from-blue-500 to-blue-700 text-white p-3 rounded-xl text-center
-                transition-all duration-300 transform
-                hover:scale-105 hover:shadow-xl hover:brightness-110">
-        <div class="font-bold text-xs">TOTAL</div>
+    <div class="bg-white border border-gray-200 rounded-xl text-center p-3
+            hover:bg-blue-100 hover:border-blue-400
+            hover:shadow-xl hover:scale-105
+            transition-all duration-300 cursor-pointer">
 
-        <div class="text-lg font-extrabold mt-1">{{ $pengajuan->count() }}</div>
-    </div>
-    <div class="bg-gradient-to-r from-yellow-400 to-yellow-600 text-white p-3 rounded-xl text-center
-            transition-all duration-300 transform
-            hover:scale-105 hover:shadow-xl hover:brightness-110">
-
-        <div class="font-bold text-xs">MENUNGGU</div>
-        <div class="text-lg font-extrabold mt-1">{{ $pengajuan->where('status', 'menunggu')->count() }}</div>
-    </div>
-   <div class="bg-gradient-to-r from-green-500 to-green-700 text-white p-3 rounded-xl text-center
-            transition-all duration-300 transform
-            hover:scale-105 hover:shadow-xl hover:brightness-110">
-        <div class="font-bold text-xs">DISETUJUI</div>
-        <div class="text-lg font-extrabold mt-1">{{ $pengajuan->where('status', 'disetujui')->count() }}</div>
+    <div class="font-bold text-xs text-gray-700">
+        TOTAL
     </div>
 
-    <div class="bg-gradient-to-r from-red-400 to-red-600 text-white p-3 rounded-xl text-center
-            transition-all duration-300 transform
-            hover:scale-105 hover:shadow-xl hover:brightness-110">
-        <div class="font-bold text-xs">DITOLAK</div>
-        <div class="text-lg font-extrabold mt-1">{{ $pengajuan->where('status', 'ditolak')->count() }}</div>
+    <div class="text-2xl font-bold text-gray-900 mt-1">
+        {{ $pengajuan->count() }}
     </div>
+
+</div>
+    <div class="bg-white border border-gray-200 rounded-xl text-center p-3
+            hover:bg-blue-100 hover:border-blue-400
+            hover:shadow-xl hover:scale-105
+            transition-all duration-300 cursor-pointer">
+
+    <div class="font-bold text-xs text-gray-700">
+        DIPROSES
+    </div>
+
+    <div class="text-2xl font-bold text-gray-900 mt-1">
+        {{ $pengajuan->where('status', 'diproses')->count() }}
+    </div>
+
+</div>
+   <div class="bg-white border border-gray-200 rounded-xl text-center p-3
+            hover:bg-blue-100 hover:border-blue-400
+            hover:shadow-xl hover:scale-105
+            transition-all duration-300 cursor-pointer">
+
+    <div class="font-bold text-xs text-gray-700">
+        DISETUJUI
+    </div>
+
+    <div class="text-2xl font-bold text-gray-900 mt-1">
+        {{ $pengajuan->where('status', 'disetujui')->count() }}
+    </div>
+
+</div>
+
+    <div class="bg-white border border-gray-200 rounded-xl text-center p-3
+            hover:bg-blue-100 hover:border-blue-400
+            hover:shadow-xl hover:scale-105
+            transition-all duration-300 cursor-pointer">
+
+    <div class="font-bold text-xs text-gray-700">
+        DITOLAK
+    </div>
+
+    <div class="text-2xl font-bold text-gray-900 mt-1">
+        {{ $pengajuan->where('status', 'ditolak')->count() }}
+    </div>
+
+</div>
 </div>
 
 <!-- TABEL PENGAJUAN -->
@@ -62,7 +92,7 @@
                         <p class="text-sm font-semibold text-gray-800">{{ $item->nama_lengkap }}</p>
                         <p class="text-xs text-gray-400">{{ $item->user->email ?? '-' }}</p>
                     </td>
-                    <td class="px-4 py-3 text-sm text-gray-700">{{ $item->layanan->nama ?? '-' }}</td>
+                    <td class="px-4 py-3 text-sm text-gray-700">{{ $item->layanan->nama ?? $item->perizinan->nama ?? '-' }}</td>
                     <td class="px-4 py-3 text-sm text-gray-500">{{ $item->created_at->format('d M Y') }}</td>
                     <td class="px-4 py-3">
                         @if($item->status == 'menunggu')
@@ -76,24 +106,28 @@
                         @endif
                     </td>
                     <td class="px-4 py-3">
-                        <button onclick="openUpdateModal(
-    {{ $item->id }},
-    '{{ $item->no_permohonan }}',
-    '{{ $item->nama_lengkap }}',
-    '{{ $item->layanan->nama ?? '-' }}',
-    '{{ $item->status }}',
-    '{{ $item->catatan_admin ?? '' }}',
-    '{{ $item->file_dokumen ? asset('storage/' . $item->file_dokumen) : '' }}'
-)"
-                            class="bg-blue-600 text-white px-3 py-1.5 rounded-lg text-xs hover:bg-blue-700 transition">
-                            <i class="fa-solid fa-pen-to-square mr-1"></i> Proses
-                        </button>
+                        <button type="button"
+    onclick='openUpdateModal(
+        @json($item->id),
+        @json($item->no_permohonan),
+        @json($item->nama_lengkap),
+        @json($item->layanan?->nama ?? $item->perizinan?->nama ?? "-"),
+        @json($item->status),
+        @json($item->catatan_admin ?? ""),
+        @json($item->file_dokumen ? asset("storage/" . $item->file_dokumen) : ""),
+        @json((bool) $item->is_perbaikan)
+    )'
+    class="bg-blue-600 text-white px-3 py-1.5 rounded-lg text-xs hover:bg-blue-700 transition">
+
+    <i class="fa-solid fa-pen-to-square mr-1"></i>
+    Proses
+</button>
                     </td>
                 </tr>
                 @empty
                 <tr>
                     <td colspan="6" class="px-4 py-8 text-center text-gray-400 text-sm">
-                        Belum ada pengajuan masuk
+                        Belum ada permohonan masuk
                     </td>
                 </tr>
                 @endforelse
@@ -112,8 +146,15 @@
             <i class="fa-solid fa-xmark text-lg"></i>
         </button>
 
-        <h2 class="text-xl font-bold text-gray-800 mb-1">Proses Pengajuan</h2>
+        <h2 class="text-xl font-bold text-gray-800 mb-1">Proses Permohonan</h2>
         <p class="text-sm text-gray-400 mb-5" id="modal_no_permohonan"></p>
+       
+        <div id="statusMessage" class="hidden mb-5"></div>
+        <div id="modal_perbaikan_badge" class="hidden mt-3 mb-5">
+            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-700">
+                Perbaikan Permohonan
+            </span>
+        </div>
 
         <!-- INFO -->
         <div class="bg-gray-50 rounded-xl p-6 mb-6 space-y-4">
@@ -126,7 +167,7 @@
                 <p class="text-sm font-semibold text-gray-700" id="modal_layanan"></p>
             </div>
             <div>
-    <p class="text-xs text-gray-400">Dokumen Pengajuan</p>
+    <p class="text-xs text-gray-400">Dokumen Permohonan</p>
 
     <a id="modal_dokumen"
        href="#"
@@ -148,10 +189,9 @@
 
             <!-- STATUS -->
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Ubah Status</label>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Status Permohonan</label>
                 <select name="status" id="modal_status"
                     class="w-full border border-gray-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500 text-sm">
-                    <option value="menunggu">Menunggu</option>
                     <option value="diproses">Diproses</option>
                     <option value="disetujui">Disetujui</option>
                     <option value="ditolak">Ditolak</option>
@@ -167,7 +207,7 @@
                     placeholder="Tambahkan catatan atau alasan penolakan..."
                     class="w-full border border-gray-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500 text-sm"></textarea>
             </div>
-
+           
             <div class="flex justify-end gap-3 pt-4 pb-2">
                 <button type="button" onclick="closeUpdateModal()"
                     class="px-4 py-2 rounded-xl bg-gray-100 text-gray-700 text-sm">
@@ -183,27 +223,40 @@
 </div>
 
 <script>
-    function openUpdateModal(id, noPermohonan, nama, layanan, status, catatan, dokumenUrl) {
+    function openUpdateModal(id, noPermohonan, nama, layanan, status, catatan, dokumenUrl, isPerbaikan) {
         document.getElementById('modal_no_permohonan').textContent = 'No. ' + noPermohonan;
         document.getElementById('modal_nama').textContent = nama;
         document.getElementById('modal_layanan').textContent = layanan;
         document.getElementById('modal_status').value = status;
         document.getElementById('modal_catatan').value = catatan;
+        // TAMPILKAN BADGE JIKA PERMOHONAN HASIL PERBAIKAN
+const perbaikanBadge = document.getElementById('modal_perbaikan_badge');
+
+if (isPerbaikan) {
+    perbaikanBadge.classList.remove('hidden');
+} else {
+    perbaikanBadge.classList.add('hidden');
+}
+
+        // Sesuaikan placeholder catatan dengan status
+        updateCatatanAdmin();
 
         // SET ACTION FORM
         document.getElementById('updateForm').action = '/admin/pengajuan/' + id + '/status';
-const dokumenLink = document.getElementById('modal_dokumen');
-const dokumenKosong = document.getElementById('modal_dokumen_kosong');
 
-if (dokumenUrl) {
-    dokumenLink.href = dokumenUrl;
-    dokumenLink.classList.remove('hidden');
-    dokumenKosong.classList.add('hidden');
-} else {
-    dokumenLink.href = '#';
-    dokumenLink.classList.add('hidden');
-    dokumenKosong.classList.remove('hidden');
-}
+        const dokumenLink = document.getElementById('modal_dokumen');
+        const dokumenKosong = document.getElementById('modal_dokumen_kosong');
+
+        if (dokumenUrl) {
+            dokumenLink.href = dokumenUrl;
+            dokumenLink.classList.remove('hidden');
+            dokumenKosong.classList.add('hidden');
+        } else {
+            dokumenLink.href = '#';
+            dokumenLink.classList.add('hidden');
+            dokumenKosong.classList.remove('hidden');
+        }
+
         document.getElementById('updateModal').classList.remove('hidden');
     }
 
@@ -212,24 +265,72 @@ if (dokumenUrl) {
     }
 
 
-function submitUpdate() {
-    // Tampilkan pesan sukses di dalam modal
-    const modalBody = document.querySelector('#updateModal .space-y-4');
-    const successMsg = document.createElement('div');
-    successMsg.className = 'bg-green-100 border border-green-300 text-green-700 px-4 py-3 rounded-xl text-sm flex items-center gap-2';
-    successMsg.innerHTML = '<i class="fa-solid fa-circle-check text-green-500"></i> Status berhasil diperbarui!';
-    modalBody.prepend(successMsg);
+    // =========================
+    // CATATAN ADMIN BERDASARKAN STATUS
+    // =========================
+    const statusSelect = document.getElementById('modal_status');
+    const catatanInput = document.getElementById('modal_catatan');
 
-    // Submit form setelah 1.5 detik
+    function updateCatatanAdmin() {
+        const status = statusSelect.value;
+
+        if (status === 'ditolak') {
+            catatanInput.placeholder =
+                'Masukkan alasan penolakan atau perbaikan yang diperlukan...';
+
+            catatanInput.required = true;
+
+        } else if (status === 'disetujui') {
+            catatanInput.placeholder =
+                'Tambahkan catatan persetujuan (opsional)...';
+
+            catatanInput.required = false;
+
+        } else {
+            catatanInput.placeholder =
+                'Tambahkan catatan terkait proses permohonan (opsional)...';
+
+            catatanInput.required = false;
+        }
+    }
+
+    // Jalankan saat Admin mengganti pilihan status
+    statusSelect.addEventListener('change', updateCatatanAdmin);
+
+
+   function submitUpdate() {
+
+    const status = document.getElementById('modal_status').value;
+    const statusMessage = document.getElementById('statusMessage');
+
+    let pesan = 'Status permohonan berhasil diperbarui.';
+    let classBox = 'bg-green-100 border border-green-300 text-green-700';
+    let icon = 'fa-circle-check text-green-500';
+
+    if (status === 'disetujui') {
+        pesan = 'Permohonan berhasil disetujui.';
+    } 
+    else if (status === 'ditolak') {
+        pesan = 'Permohonan berhasil ditolak.';
+        classBox = 'bg-red-100 border border-red-300 text-red-700';
+        icon = 'fa-circle-xmark text-red-500';
+    }
+
+    statusMessage.className =
+        'px-4 py-3 rounded-xl text-sm font-medium flex items-center gap-2 ' 
+        + classBox;
+
+    statusMessage.innerHTML =
+        '<i class="fa-solid ' + icon + '"></i>' +
+        '<span>' + pesan + '</span>';
+
+    statusMessage.classList.remove('hidden');
+
     setTimeout(function () {
         document.getElementById('updateForm').submit();
-    }, 1500);
+    }, 3000);
 }
+</script>
 
-</script>
-@if(session('success'))
-<script>
-    alert("{{ session('success') }}");
-</script>
-@endif
+
 @endsection

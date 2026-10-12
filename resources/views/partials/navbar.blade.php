@@ -19,20 +19,7 @@
       <ul class="flex space-x-8 font-medium text-lg absolute left-1/2 transform -translate-x-1/2 -mt-2">
         <li><a href="{{ route('beranda') }}" class="text-blue-700 font-bold hover:underline">Beranda</a></li>
 
-        <!-- Dropdown Layanan -->
-        <li class="relative group">
-          <button class="flex items-center text-blue-700 font-bold hover:underline">
-            Layanan
-            <svg class="w-4 h-4 ml-1 mt-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
-            </svg>
-          </button>
-          <ul class="absolute left-0 top-full mt-1 hidden group-hover:block bg-white border border-gray-200 shadow-md rounded-md w-48 z-50">
-            <li><a href="{{ route('perizinan.show', 1) }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Perizinan 1</a></li>
-  <li><a href="{{ route('perizinan.show', 2) }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Perizinan 2</a></li>
-  
-          </ul>
-        </li>
+        
 
         <li><a href="{{ route('faq') }}" class="text-blue-700 font-bold hover:underline">FAQ</a></li>
         <li><a href="{{ route('kontak') }}" class="text-blue-700 font-bold hover:underline">Kontak</a></li>
@@ -119,20 +106,7 @@
       <li><a href="{{ route('beranda') }}" class="text-blue-700 font-bold">Beranda</a></li>
 
       <!-- Mobile Dropdown Layanan -->
-      <li>
-        <button id="mobile-layanan-btn" class="w-full flex justify-between items-center text-blue-700 font-bold py-2 px-3">
-          Layanan
-          <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
-          </svg>
-        </button>
-        <ul id="mobile-layanan" class="hidden flex flex-col pl-4 mt-1 space-y-1">
-          <li><a href="{{ route('perizinan.show', 1) }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Perizinan 1</a></li>
-<li><a href="{{ route('perizinan.show', 2) }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Perizinan 2</a></li>
-<li><a href="{{ route('perizinan.show', 3) }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Perizinan 3</a></li>
-
-        </ul>
-      </li>
+      
 
       <li><a href="{{ route('faq') }}" class="text-blue-700 font-bold">FAQ</a></li>
       <li><a href="{{ route('kontak') }}" class="text-blue-700 font-bold">Kontak</a></li>
@@ -222,10 +196,7 @@
 <!-- Dropdown JS -->
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    // Mobile layanan
-    const layananBtn = document.getElementById('mobile-layanan-btn');
-    const layananMenu = document.getElementById('mobile-layanan');
-    layananBtn.addEventListener('click', () => layananMenu.classList.toggle('hidden'));
+   
 
     // Desktop user dropdown
     const userBtn = document.getElementById('user-btn');

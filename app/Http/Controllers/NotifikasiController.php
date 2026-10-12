@@ -14,13 +14,18 @@ class NotifikasiController extends Controller
         return response()->json($notifikasi);
     }
 
-    public function tandaiBaca($id)
-    {
-        Notifikasi::where('id', $id)
-            ->where('user_id', Auth::id())
-            ->update(['dibaca' => true]);
-        return response()->json(['success' => true]);
-    }
+public function tandaiBaca($id)
+{
+    Notifikasi::where('id', $id)
+        ->where('user_id', Auth::id())
+        ->update([
+            'dibaca' => true
+        ]);
+
+    return response()->json([
+        'success' => true
+    ]);
+}
 
     public function bacaSemua()
     {

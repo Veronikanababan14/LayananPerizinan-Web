@@ -1,114 +1,176 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Admin</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100 flex items-center justify-center h-screen">
+@extends('layouts.app')
 
-    <div class="max-w-md w-full bg-white p-6 rounded-lg shadow">
-        <h2 class="text-xl font-bold mb-4 text-center">Login Admin</h2>
+@section('content')
 
-        <!-- Tampilkan pesan error jika login gagal -->
-        @if(session('error'))
-            <div class="bg-red-100 text-red-700 border border-red-400 p-2 rounded mb-4">
-                {{ session('error') }}
-            </div>
-        @endif
+<div class="min-h-screen flex items-center justify-center bg-gray-100 py-10 px-4">
+  <div class="bg-white rounded-2xl shadow-xl w-full max-w-5xl overflow-hidden">
+    <div class="grid md:grid-cols-2 h-full">
 
-        <form method="POST" action="{{ route('admin.login.submit') }}">
-            @csrf
-            <div class="mb-4">
-                <label class="block mb-1 font-medium">Email</label>
-                <input type="email" name="email" value="{{ old('email') }}" class="w-full border p-2 rounded @error('email') border-red-500 @enderror" required>
-                @error('email')
-                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                @enderror
-            </div>
+```
+  {{-- Kolom kiri: ilustrasi --}}
+  <div class="hidden md:flex bg-white w-full h-full p-6">
+    <img src="{{ asset('images/jembatan.jpeg') }}"
+         alt="Ilustrasi Login Admin"
+         class="w-full h-full object-cover rounded-xl">
+  </div>
 
-            <!-- Password Field -->
-            <div class="mb-4">
-                <label class="block mb-1 font-medium">Password</label>
-                <div class="relative flex items-center">
-                    <input 
-                        type="password" 
-                        name="password" 
-                        id="password" 
-                        class="w-full border p-2 rounded pr-10 @error('password') border-red-500 @enderror" 
-                        required
-                    >
-                    <!-- Tombol ikon mata -->
-                    <button 
-                        type="button" 
-                        id="togglePassword" 
-                        class="absolute right-3 flex items-center justify-center text-gray-500"
-                    >
-                        <!-- SVG mata -->
-                        <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" 
-                             class="h-5 w-5 pointer-events-none" fill="none" 
-                             viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                  d="M2.458 12C3.732 7.943 7.523 5 12 5
-                                     c4.477 0 8.268 2.943 9.542 7
-                                     -1.274 4.057-5.065 7-9.542 7
-                                     -4.477 0-8.268-2.943-9.542-7z" />
-                        </svg>
-                    </button>
-                </div>
-                @error('password')
-                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                @enderror
-            </div>
+  {{-- Kolom kanan: FORM --}}
+  <div class="bg-[#0b1d63] p-8 md:p-10 flex flex-col justify-center">
+    <h2 class="text-3xl font-bold text-white mb-8">Login Admin</h2>
 
-            <button type="submit" class="w-full bg-blue-600 text-white p-2 rounded">Login</button>
-        </form>
+    {{-- Flash Notifikasi --}}
+    @if (session('error'))
+      <div class="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
+        {{ session('error') }}
+      </div>
+    @endif
 
-        <!-- Forgot Password -->
-        <div class="text-center mt-4">
-            <a href="{{ route('admin.password.request') }}" class="text-red-600 hover:underline text-sm">
-                Lupa Password?
-            </a>
+    <form method="POST" action="{{ route('admin.login.submit') }}">
+      @csrf
+
+      {{-- Email --}}
+      <div class="mb-4">
+        <label for="email" class="sr-only">Email</label>
+
+        <div class="flex items-center border-2 border-amber-400 bg-white rounded-lg px-3 py-2
+                    focus-within:ring-2 focus-within:ring-white/60">
+
+          <svg xmlns="http://www.w3.org/2000/svg"
+               viewBox="0 0 24 24"
+               fill="currentColor"
+               class="w-5 h-5 text-[#0b1d63]">
+            <path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5Zm7 8a7 7 0 0 0-14 0 1 1 0 0 0 1 1h12a1 1 0 0 0 1-1Z"/>
+          </svg>
+
+          <input id="email"
+                 name="email"
+                 type="email"
+                 value="{{ old('email') }}"
+                 required
+                 class="w-full bg-white border-0 focus:ring-0 px-3
+                        placeholder-[#0b1d63]/70 text-[#0b1d63]"
+                 placeholder="Email">
         </div>
-    </div>
 
-    <script>
-        const togglePassword = document.querySelector('#togglePassword');
-        const password = document.querySelector('#password');
-        const eyeIcon = document.querySelector('#eyeIcon');
+        @error('email')
+          <p class="text-red-300 text-sm mt-1">{{ $message }}</p>
+        @enderror
+      </div>
 
-        togglePassword.addEventListener('click', () => {
-            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
-            password.setAttribute('type', type);
+      {{-- Password + ikon mata --}}
+      <div class="mb-5">
+        <label for="password" class="sr-only">Password</label>
 
-            // Ganti ikon mata terbuka / tertutup
-            if(type === 'text') {
-                eyeIcon.innerHTML = `
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                          d="M13.875 18.825A10.05 10.05 0 0112 19
-                             c-4.478 0-8.268-2.943-9.542-7
-                             a10.05 10.05 0 012.152-3.317m3.91-2.667
-                             A9.953 9.953 0 0112 5c4.478 0 8.268 2.943
-                             9.542 7a10.05 10.05 0 01-1.334 2.585M15 12
-                             a3 3 0 11-6 0 3 3 0 016 0z" />
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                          d="M3 3l18 18" />
-                `;
-            } else {
-                eyeIcon.innerHTML = `
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                          d="M2.458 12C3.732 7.943 7.523 5 12 5
-                             c4.477 0 8.268 2.943 9.542 7
-                             -1.274 4.057-5.065 7-9.542 7
-                             -4.477 0-8.268-2.943-9.542-7z" />
-                `;
-            }
-        });
-    </script>
-</body>
-</html>
+        <div class="flex items-center border-2 border-amber-400 bg-white rounded-lg px-3 py-2
+                    focus-within:ring-2 focus-within:ring-white/60 relative">
+
+          <svg xmlns="http://www.w3.org/2000/svg"
+               viewBox="0 0 24 24"
+               fill="currentColor"
+               class="w-5 h-5 text-[#0b1d63]">
+            <path d="M17 10h-1V7a4 4 0 0 0-8 0v3H7a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-8a1 1 0 0 0-1-1Zm-7-3a2 2 0 1 1 4 0v3h-4Z"/>
+          </svg>
+
+          <input id="password"
+                 name="password"
+                 type="password"
+                 required
+                 class="w-full bg-white border-0 focus:ring-0 px-3
+                        placeholder-[#0b1d63]/70 text-[#0b1d63]"
+                 placeholder="Password">
+
+          {{-- Tombol ikon mata --}}
+          <button type="button"
+                  id="togglePassword"
+                  class="absolute right-3 text-[#0b1d63] hover:text-amber-500 focus:outline-none">
+
+            <svg id="eyeClosed"
+                 xmlns="http://www.w3.org/2000/svg"
+                 fill="none"
+                 viewBox="0 0 24 24"
+                 stroke="currentColor"
+                 class="w-5 h-5">
+
+              <path stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M13.875 18.825A10.05 10.05 0 0112 19c-5.523 0-10-4.03-10-9 0-1.184.23-2.313.652-3.351M9.878 9.88a3 3 0 104.243 4.242M15.536 8.464A9.969 9.969 0 0122 10c0 4.97-4.477 9-10 9-.883 0-1.735-.118-2.54-.34M3 3l18 18"/>
+            </svg>
+
+            <svg id="eyeOpen"
+                 xmlns="http://www.w3.org/2000/svg"
+                 fill="none"
+                 viewBox="0 0 24 24"
+                 stroke="currentColor"
+                 class="w-5 h-5 hidden">
+
+              <path stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+
+              <path stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+            </svg>
+          </button>
+        </div>
+
+        @error('password')
+          <p class="text-red-300 text-sm mt-1">{{ $message }}</p>
+        @enderror
+      </div>
+
+      {{-- Ingat saya + Lupa password --}}
+      <div class="flex items-center justify-between text-sm text-white mb-6">
+
+        <label class="inline-flex items-center gap-2">
+          <input type="checkbox"
+                 name="remember"
+                 class="rounded">
+
+          <span>Ingat saya</span>
+        </label>
+
+        <a href="{{ route('admin.password.request') }}">
+          Lupa password?
+        </a>
+      </div>
+
+      {{-- Tombol Masuk --}}
+      <button type="submit"
+              class="w-full bg-white text-[#0b1d63] font-semibold py-2.5 rounded-lg
+                     hover:bg-gray-300 transition">
+        Masuk
+      </button>
+
+    </form>
+  </div>
+</div>
+```
+
+  </div>
+</div>
+
+{{-- Script untuk toggle password --}}
+
+<script>
+document.getElementById('togglePassword').addEventListener('click', function() {
+  const password = document.getElementById('password');
+  const eyeOpen = document.getElementById('eyeOpen');
+  const eyeClosed = document.getElementById('eyeClosed');
+
+  if (password.type === 'password') {
+    password.type = 'text';
+    eyeOpen.classList.remove('hidden');
+    eyeClosed.classList.add('hidden');
+  } else {
+    password.type = 'password';
+    eyeOpen.classList.add('hidden');
+    eyeClosed.classList.remove('hidden');
+  }
+});
+</script>
+
+@endsection

@@ -1,3 +1,4 @@
+```blade
 @extends('layouts.admin')
 
 @section('content')
@@ -26,7 +27,7 @@
 
             @csrf
 
-            <!-- NamaSektor Perizinan -->
+            <!-- Nama Sektor Perizinan -->
             <div class="mb-4">
                 <label class="block text-sm font-semibold text-gray-700 mb-2">
                     Nama Sektor Perizinan
@@ -51,6 +52,38 @@
                           class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none">{{ old('deskripsi') }}</textarea>
             </div>
 
+            <!-- Persyaratan -->
+            <div class="mb-4">
+                <label class="block text-sm font-semibold text-gray-700 mb-2">
+                    Persyaratan
+                </label>
+
+                <textarea name="persyaratan"
+                          rows="6"
+                          placeholder="Masukkan persyaratan, satu persyaratan untuk setiap baris"
+                          class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none">{{ old('persyaratan') }}</textarea>
+
+                <p class="text-sm text-gray-500 mt-1">
+                    Tuliskan setiap persyaratan pada baris terpisah agar mudah dibaca pada halaman detail layanan.
+                </p>
+            </div>
+
+            <!-- Alur Layanan -->
+            <div class="mb-4">
+                <label class="block text-sm font-semibold text-gray-700 mb-2">
+                    Alur Layanan
+                </label>
+
+                <textarea name="alur_layanan"
+                          rows="6"
+                          placeholder="Masukkan tahapan alur layanan, satu tahapan untuk setiap baris"
+                          class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none">{{ old('alur_layanan') }}</textarea>
+
+                <p class="text-sm text-gray-500 mt-1">
+                    Tuliskan setiap tahapan pada baris terpisah sesuai urutan proses layanan.
+                </p>
+            </div>
+
             <!-- Upload Gambar -->
             <div class="mb-6">
                 <label class="block text-sm font-semibold text-gray-700 mb-2">
@@ -59,10 +92,11 @@
 
                 <input type="file"
                        name="image"
+                       accept=".jpg,.jpeg,.png"
                        class="w-full border border-gray-300 rounded-lg px-4 py-2">
 
                 <p class="text-sm text-gray-500 mt-1">
-                    Format yang didukung: JPG, JPEG, PNG
+                    Format yang didukung: JPG, JPEG, PNG.
                 </p>
             </div>
 

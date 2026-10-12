@@ -18,11 +18,7 @@
       <p class="text-gray-700 pl-16">{!! nl2br(e($layanan->detail_proses)) !!}</p>
     </div>
 
-    <!-- Kecilkan ukuran tombol -->
-    <a href="{{ route('beranda') }}" 
-       class="inline-block mt-4 bg-blue-700 text-white py-0.5 px-2 rounded hover:bg-blue-800 font-medium text-xs">
-      Kembali ke Beranda
-    </a>
+   
   </div>
 </section>
 @endsection
